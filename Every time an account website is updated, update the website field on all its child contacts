@@ -1,0 +1,39 @@
+//  Using  Apex Trigger to automatically update the website field on all child contacts whenever an account website is updated.
+
+//AccountTrigger1.apxt
+trigger AccountTrigger1 on Account (after update ) {
+    if(Trigger.isAfter && Trigger.isUpdate){
+        AccountTriggerHandler.handleAfterUpdateActivities(Trigger.NEW , Trigger.oldMap);
+    }
+}
+
+
+//AccountTriggerHandler.apxc
+public class AccountTriggerHandler {
+
+    public static void handleAfterUpdateActivities(List<Account> newRecords , Map<Id , Account> oldMap){
+        
+        Map<Id , String > accToWebsiteMap = new Map<Id,String>();
+        //List<Id> addAccIdList = new List<Id>();
+        for( Account acc: newRecords ){
+            if(acc.Website != oldMap.get(acc.Id).Website){
+                accToWebsiteMap.put(acc.Id, acc.Website);
+            }
+        }
+        
+        if(accToWebsiteMap.keySet().size() > 0 ){
+            List<Contact> addConToUpdate = new List<Contact>();
+            List<Contact> conRecords = [SELECT Id , FirstName , AccountId ,  Website__c FROM Contact Where  AccountId In : accToWebsiteMap.keySet() ];
+            for( Contact con : conRecords){
+                con.Website__c = accToWebsiteMap.get(con.AccountId);
+                addConToUpdate.add(con);
+            }
+            if(addConToUpdate.size() > 0 ){
+            update addConToUpdate;
+        }
+      
+        }
+        
+      
+   }
+}
