@@ -1,11 +1,11 @@
 //  Using  Apex Trigger to automatically update the website field on all child contacts whenever an account website is updated.
 
 //AccountTrigger1.apxt
-trigger AccountTrigger1 on Account (after update ) {
-    if(Trigger.isAfter && Trigger.isUpdate){
-        AccountTriggerHandler.handleAfterUpdateActivities(Trigger.NEW , Trigger.oldMap);
-    }
-}
+//trigger AccountTrigger1 on Account (after update ) {
+//    if(Trigger.isAfter && Trigger.isUpdate){
+//        AccountTriggerHandler.handleAfterUpdateActivities(Trigger.NEW , Trigger.oldMap);
+//    }
+//}
 
 
 //AccountTriggerHandler.apxc
